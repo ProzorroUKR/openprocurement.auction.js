@@ -16,7 +16,7 @@ angular.module('auction').filter('floor', [function () {
       if (!angular.isNumber(value)){
         value = math.eval(math.format(math.fraction(value)));
       }
-      var precision_module = 10 ** precision;
+      var precision_module = Math.pow(10, precision);
       value = Math.floor(value * precision_module) / precision_module;
       return format_function(value);
     }
