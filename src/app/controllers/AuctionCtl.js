@@ -462,18 +462,6 @@ angular.module('auction').controller('AuctionController',[
             }
           } else {
             var bid = success.data.data.bid;
-            if ((bid <= ($rootScope.max_bid_amount() * 0.1)) && (bid != -1)) {
-              var msg_id = Math.random();
-              $rootScope.alerts.push({
-                msg_id: msg_id,
-                type: 'warning',
-                msg: 'Your bid appears too low'
-              });
-              $log.info({
-                message: "Your bid appears too low",
-                bid_data: bid
-              });
-            }
             var msg_id = Math.random();
             if (bid == -1) {
               $rootScope.alerts = [];
@@ -492,7 +480,7 @@ angular.module('auction').controller('AuctionController',[
               $rootScope.form.bid = "";
               $rootScope.form.full_price = '';
               $rootScope.form.bid_temp = '';
-
+              $rootScope.set_force_post_low_bid(null);
             } else {
               $log.info({
                 message: "Handle success response on post bid",
@@ -537,6 +525,15 @@ angular.module('auction').controller('AuctionController',[
               $timeout($rootScope.post_bid, 2000);
             }
           });
+      }else if($rootScope.form.BidsForm.bid.$error.tooLowBid){
+         // CS-938: this validation works only for the first send attempt
+         $rootScope.set_force_post_low_bid($rootScope.form.bid);
+         $rootScope.validate_bid_input();  // re-validate bid form with respect to force_post_low_bid
+         $log.info({
+            message: "Posting bid attempt is blocked because of the too low value validation",
+            bid_data: parseFloat(bid) || parseFloat($rootScope.form.bid) || 0,
+            force_low_bid: $rootScope.force_post_low_bid
+         });
       }
     };
     $rootScope.edit_bid = function() {
@@ -800,6 +797,7 @@ angular.module('auction').controller('AuctionController',[
     };
     $rootScope.calculate_full_price_temp = function() {
       $rootScope.form.bid = (math.fix((math.fraction($rootScope.form.full_price) * $rootScope.bidder_coeficient) * 100)) / 100;
+      $rootScope.validate_bid_input();
       $rootScope.form.full_price_temp = $rootScope.form.bid / $rootScope.bidder_coeficient;
     };
     $rootScope.set_bid_from_temp = function() {
@@ -810,6 +808,14 @@ angular.module('auction').controller('AuctionController',[
           precision: 2
         }).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(/\./g, ","));
       }
+    };
+    $rootScope.set_force_post_low_bid = function(value){
+        $rootScope.$root.force_post_low_bid = value;
+    };
+    $rootScope.validate_bid_input = function(){
+        $timeout(function() {
+            $rootScope.form.BidsForm.bid.$$parseAndValidate();
+        });
     };
     $rootScope.start();
 }]);

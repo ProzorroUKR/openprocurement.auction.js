@@ -404,6 +404,12 @@
                     <div class="col-xs-12">
                         <div class="container">
                             <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-class="'alert-' + (alert.type || 'warning')" class="bids-form-alert" close="closeAlert(alert.msg_id)"><span class="bids-form-alert-msg">{{ alert.msg | translate }}</span></div>
+                            {{form.BidsForm.bid.$error.tooLowBid}}/{{force_post_low_bid}}/{{$root.force_post_low_bid }}>{{form.bid != null}}
+                            <div uib-alert ng-show="form.BidsForm.bid.$error.tooLowBid || force_post_low_bid && form.bid != null" type="danger" class="bids-form-alert alert-danger">
+                                <span class="bids-form-alert-msg" translate="TOO_LOW_BID_WARNING" translate-values="{bid_percent: form.bid / calculated_max_bid_amount * 100 }"></span>
+                                <span translate>Are you sure you want to post it?</span>
+                                <div ng-show="force_post_low_bid && allow_bidding" translate>Click the button again for posting</div>
+                            </div>
                             <form id="BidsForm" name="form.BidsForm" role="form">
                                 <label for="bid"><span translate>Your proposal</span>:</label>
                                 <span ng-init="max_bid_amount()" class="max_bid_amount" id="max_bid_amount" ng-if="(auction_doc.auction_type||'default') == 'default'"><span id="max_bid_amount_price">{{ calculated_max_bid_amount|fraction }}</span> {{'or lower'|translate}}</span>
