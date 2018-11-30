@@ -88,7 +88,7 @@ angular.module('auction').config(
     'Please use the correct link to view the auction.': 'Please use the correct link to view the auction.',
     'Auction has not started and will be rescheduled': 'Auction has not started and will be rescheduled',
     'Please wait for the auction start.': 'Please wait for the auction start.',
-    'TOO_LOW_BID_WARNING': 'Your bid is {{bid_percent|number:2}}% of the maximum.',
+    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?'
   });
 
   $translateProvider.translations('uk', {
@@ -177,9 +177,7 @@ angular.module('auction').config(
     'Please use the correct link to view the auction.': 'Будь ласка, використовуйте правильне посилання для перегляду аукціону.',
     'Auction has not started and will be rescheduled': 'Аукціон не розпочався і буде перепланований',
     'Please wait for the auction start.': 'Будь ласка, дочекайтесь початку аукціону.',
-    'TOO_LOW_BID_WARNING': 'Ваша ставка складає {{bid_percent|number:2}}% від максимально можливої.',
-    'Are you sure you want to post it?': 'Ви певні що хочете її зробити?',
-    'Click the button again for posting': 'Натисніть кнопку ще раз щоб зробити ставку'
+    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Ви збираєтеся значно понизити свою ставку на {{too_low_bid_ratio}}%. Ви впевнені?'
   });
 
 
@@ -269,8 +267,6 @@ angular.module('auction').config(
     'Please use the correct link to view the auction.': 'Пожалуйста, используйте правильную ссылку для просмотра аукциона.',
     'Auction has not started and will be rescheduled': 'Аукцион не начался и будет перепланирован',
     'Please wait for the auction start.': 'Пожалуйста, дождитесь начала аукциона.',
-    'TOO_LOW_BID_WARNING': 'Ваша ставка составляет {{bid_percent|number:2}}% от максимальной.',
-    'Are you sure you want to post it?': 'Вы уверены, что хотите опубликовать её?',
-    'Click the button again for posting': 'Нажмите кнопку еще раз для отправки предложения.'
+    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Вы собираетесь значительно снизить свою ставку на {{too_low_bid_ratio}}%. Вы уверены?'
   });
 });
