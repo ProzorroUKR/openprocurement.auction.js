@@ -41,6 +41,7 @@ module.exports = function(config) {
       './src/app/directives/*.js',
       //'test-main.js',
       './src/app/tests/auction_data_samples.js',
+      './src/app/tests/format_directive.spec.js',
       './src/app/tests/auction_utils.spec.js',
       './src/app/tests/controllers.spec.js',
       './src/app/tests/filters.spec.js',
