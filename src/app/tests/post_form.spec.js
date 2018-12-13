@@ -27,7 +27,7 @@ describe('Post Bid Form Tests', function () {
     $compile(element)(rootScope);
   }));
 
-  it('should raise validation error if bid is 30% of max allowed', function () {
+  it('should raise validation error if bid is less than 70% of max allowed', function () {
       scope.form.BidsForm.bid.$setViewValue('100');
       scope.$digest();
       expect(scope.form.bid).toEqual(100);
@@ -49,24 +49,24 @@ describe('Post Bid Form Tests', function () {
       expect(scope.alerts[0].msg_vars.too_low_bid_ratio).toEqual("100.00");
   });
 
-  it('should not raise exception if bid is greater than 30% of max allowed', function () {
-      scope.form.BidsForm.bid.$setViewValue('300.01');
+  it('should not raise exception if bid is greater than 70% of max allowed', function () {
+      scope.form.BidsForm.bid.$setViewValue('700.01');
       scope.$digest();
-      expect(scope.form.bid).toEqual(300.01);
+      expect(scope.form.bid).toEqual(700.01);
       expect(scope.post_bid()).toBe(undefined);
       expect(scope.alerts.length).toBe(0);
   });
 
   it('should disable validation once post_bid is called', function () {
-      scope.form.BidsForm.bid.$setViewValue('300');
+      scope.form.BidsForm.bid.$setViewValue('700');
       scope.$digest();
-      expect(scope.form.bid).toEqual(300);
+      expect(scope.form.bid).toEqual(700);
 
       expect(scope.force_post_low_bid).toBe(undefined);
       expect(scope.post_bid()).toBe(0);
       expect(scope.alerts[0].msg).toBe("You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?");
 
-      expect(scope.force_post_low_bid).toBe(300);
+      expect(scope.force_post_low_bid).toBe(700);
       expect(scope.post_bid()).toBe(undefined);
       expect(scope.alerts.length).toBe(0);
   });
