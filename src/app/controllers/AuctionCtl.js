@@ -518,7 +518,6 @@ angular.module('auction').controller('AuctionController',[
               });
               $rootScope.form.bid = "";
               $rootScope.form.full_price = '';
-              $rootScope.form.bid_temp = '';
             } else {
               $log.info({
                 message: "Handle success response on post bid",
@@ -820,22 +819,19 @@ angular.module('auction').controller('AuctionController',[
     };
     /* 2-WAY INPUT */
     $rootScope.calculate_bid_temp = function() {
-      $rootScope.form.bid_temp = Number(math.fraction(($rootScope.form.bid * 100).toFixed(), 100));
-      $rootScope.form.full_price = $rootScope.form.bid_temp / $rootScope.bidder_coeficient;
-      $log.debug("Set bid_temp:", $rootScope.form);
+      var new_full_price;
+      if(!angular.isUndefined($rootScope.form.bid)){
+        var form_bid = Number(math.fraction(($rootScope.form.bid * 100).toFixed(), 100));
+        new_full_price = form_bid / $rootScope.bidder_coeficient;
+      }
+      $rootScope.form.full_price = new_full_price;
     };
     $rootScope.calculate_full_price_temp = function() {
-      $rootScope.form.bid = (math.fix((math.fraction($rootScope.form.full_price) * $rootScope.bidder_coeficient) * 100)) / 100;
-      $rootScope.form.full_price_temp = $rootScope.form.bid / $rootScope.bidder_coeficient;
-    };
-    $rootScope.set_bid_from_temp = function() {
-      $rootScope.form.bid = $rootScope.form.bid_temp;
-      if ($rootScope.form.bid){
-        $rootScope.form.BidsForm.bid.$setViewValue(math.format($rootScope.form.bid, {
-          notation: 'fixed',
-          precision: 2
-        }).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(/\./g, ","));
+      var new_form_bid;
+      if(!angular.isUndefined($rootScope.form.full_price)){
+        new_form_bid = (math.fix((math.fraction($rootScope.form.full_price) * $rootScope.bidder_coeficient) * 100)) / 100;
       }
+      $rootScope.form.bid = new_form_bid;
     };
     $rootScope.start();
 }]);

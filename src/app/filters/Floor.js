@@ -12,7 +12,7 @@ angular.module('auction').filter('floor', [function () {
       return parts.join(",");
     };
 
-    if (!angular.isUndefined(value)) {
+    if (!angular.isUndefined(value) && value !== "") {
       if (!angular.isNumber(value)){
         value = math.eval(math.format(math.fraction(value)));
       }
