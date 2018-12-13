@@ -822,7 +822,7 @@ angular.module('auction').controller('AuctionController',[
     /* 2-WAY INPUT */
     $rootScope.calculate_bid_temp = function() {
       var new_full_price;
-      if(!angular.isUndefined($rootScope.form.bid)){
+      if(angular.isDefined($rootScope.form.bid)){
         var form_bid = Number(math.fraction(($rootScope.form.bid * 100).toFixed(), 100));
         new_full_price = form_bid / $rootScope.bidder_coeficient;
       }
@@ -830,7 +830,7 @@ angular.module('auction').controller('AuctionController',[
     };
     $rootScope.calculate_full_price_temp = function() {
       var new_form_bid;
-      if(!angular.isUndefined($rootScope.form.full_price)){
+      if(angular.isDefined($rootScope.form.full_price)){
         new_form_bid = (math.fix((math.fraction($rootScope.form.full_price) * $rootScope.bidder_coeficient) * 100)) / 100;
       }
       $rootScope.form.bid = new_form_bid;
