@@ -49,6 +49,24 @@ describe('Post Bid Form Tests', function () {
       expect(scope.alerts[0].msg_vars.too_low_bid_ratio).toEqual("100.00");
   });
 
+  it('should not raise validation error while bid cancellation', function () {
+      scope.form.BidsForm.bid.$setViewValue("900");
+      scope.$digest();
+
+      expect(scope.form.bid).toEqual(900);
+      expect(scope.post_bid(-1)).toBe(undefined);
+      expect(scope.alerts.length).toBe(0);
+  });
+
+  it('should not raise validation error while bid cancellation', function () {
+      scope.form.BidsForm.bid.$setViewValue("10");
+      scope.$digest();
+
+      expect(scope.form.bid).toEqual(10);
+      expect(scope.post_bid(-1)).toBe(undefined);
+      expect(scope.alerts.length).toBe(0);
+  });
+
   it('should not raise exception if bid is greater than 70% of max allowed', function () {
       scope.form.BidsForm.bid.$setViewValue('700.01');
       scope.$digest();

@@ -424,7 +424,8 @@ angular.module('auction').controller('AuctionController',[
     $rootScope.prevent_sending_too_low_bid = function(value){
         var ratio = 1 - value / $rootScope.calculated_max_bid_amount;
         if (
-            $rootScope.calculated_max_bid_amount == null || value == null || ratio < 0.3
+            $rootScope.calculated_max_bid_amount == null || value == null || value === -1
+            || ratio < 0.3
             || $rootScope.force_post_low_bid === value
         ) {
             $rootScope.closeAlert(too_low_bid_msg_id);
