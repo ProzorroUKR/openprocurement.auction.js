@@ -428,6 +428,7 @@ angular.module('auction').controller('AuctionController',[
             || ratio < 0.3
             || $rootScope.force_post_low_bid === value
         ) {
+            $rootScope.force_post_low_bid = undefined;
             $rootScope.closeAlert(too_low_bid_msg_id);
             return false;
         } else {
