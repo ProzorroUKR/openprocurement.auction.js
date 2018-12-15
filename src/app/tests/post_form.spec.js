@@ -89,4 +89,28 @@ describe('Post Bid Form Tests', function () {
       expect(scope.alerts.length).toBe(0);
   });
 
+  it('should show validation again after cancelling', function () {
+      scope.form.BidsForm.bid.$setViewValue('700');
+      scope.$digest();
+      expect(scope.form.bid).toEqual(700);
+
+      // first try (error expected)
+      expect(scope.force_post_low_bid).toBe(undefined);
+      expect(scope.post_bid()).toBe(0);
+      expect(scope.alerts[0].msg).toBe("You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?");
+
+      // cancelling
+      expect(scope.force_post_low_bid).toBe(700);
+      expect(scope.post_bid(-1)).toBe(undefined);
+      expect(scope.alerts.length).toBe(0);
+
+      // again first try (error expected)
+      expect(scope.post_bid()).toBe(0);
+      expect(scope.alerts[0].msg).toBe("You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?");
+
+      // second click
+      expect(scope.post_bid()).toBe(undefined);
+      expect(scope.alerts.length).toBe(0);
+  });
+
 });
