@@ -117,7 +117,6 @@ describe('auctionTest', function () {
     scope.form.bid = 11;
     rootScope.bidder_coeficient = 4;
     scope.calculate_bid_temp();
-    expect(scope.form.bid_temp).toBe(11);
     expect(scope.form.full_price).toBe(2.75);
   });
 //$scope.calculate_full_price_temp
@@ -128,19 +127,8 @@ describe('auctionTest', function () {
     scope.form.full_price = 11;
     rootScope.bidder_coeficient = 3;
     scope.calculate_full_price_temp();
-    expect(scope.form.full_price_temp).toBe(11);
     expect(scope.form.bid).toBe(33);
-  });  
-//$scope.set_bid_from_temp
-  it('should be Defined', function () {
-    expect(scope.set_bid_from_temp).toBeDefined();
   });
-  it('should work correct', function () {
-    scope.form.bid_temp = 0;
-    scope.set_bid_from_temp();
-    expect(scope.form.bid).toBe(0);
-  });
-
 
 /*//controller 'OffCanvasController'
 //$scope.allert
