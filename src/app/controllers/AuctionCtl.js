@@ -399,6 +399,44 @@ angular.module('auction').controller('AuctionController',[
     $rootScope.warning_post_bid = function(){
       growl.error('Unable to place a bid. Check that no more than 2 auctions are simultaneously opened in your browser.');
     };
+    var too_low_bid_msg_id = "too_low_bid_msg_id";
+    $rootScope.show_too_low_bid_warning = function(value){
+        var prev_value = 0;
+        if (angular.isObject($rootScope.auction_doc)) {
+            var current_stage_obj = $rootScope.auction_doc.stages[$rootScope.auction_doc.current_stage];
+            if (angular.isObject(current_stage_obj) && (current_stage_obj.amount || current_stage_obj.amount_features)) {
+              if (($rootScope.auction_doc.auction_type || "default") === "meat") {
+                if($rootScope.bidder_coeficient){
+                    prev_value = math.fraction(current_stage_obj.amount_features) * $rootScope.bidder_coeficient;
+                }
+              } else {
+                prev_value = math.fraction(current_stage_obj.amount);
+              }
+            }
+        };
+        var too_low_bid_ratio = prev_value !== 0 ? (100 - value / prev_value * 100).toFixed(2) : NaN;
+        $rootScope.alerts.push({
+            type: 'danger',
+            msg: 'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?',
+            msg_vars: {too_low_bid_ratio: too_low_bid_ratio}
+        });
+    }
+    $rootScope.prevent_sending_too_low_bid = function(value){
+        var ratio = 1 - value / $rootScope.calculated_max_bid_amount;
+        if (
+            $rootScope.calculated_max_bid_amount == null || value == null || value === -1
+            || ratio < 0.3
+            || $rootScope.force_post_low_bid === value
+        ) {
+            $rootScope.force_post_low_bid = undefined;
+            $rootScope.closeAlert(too_low_bid_msg_id);
+            return false;
+        } else {
+            $rootScope.force_post_low_bid = value;
+            $rootScope.show_too_low_bid_warning(value);
+            return true;
+        }
+    };
     $rootScope.post_bid = function(bid) {
       $log.info({
         message: "Start post bid",
@@ -418,6 +456,9 @@ angular.module('auction').controller('AuctionController',[
       if ($rootScope.form.BidsForm.$valid) {
         $rootScope.alerts = [];
         var bid_amount = parseFloat(bid) || parseFloat($rootScope.form.bid) || 0;
+        if ($rootScope.prevent_sending_too_low_bid(bid_amount)){
+            return 0;
+        }
         if (bid_amount == $rootScope.minimal_bid.amount) {
           var msg_id = Math.random();
           $rootScope.alerts.push({
@@ -462,18 +503,6 @@ angular.module('auction').controller('AuctionController',[
             }
           } else {
             var bid = success.data.data.bid;
-            if ((bid <= ($rootScope.max_bid_amount() * 0.1)) && (bid != -1)) {
-              var msg_id = Math.random();
-              $rootScope.alerts.push({
-                msg_id: msg_id,
-                type: 'warning',
-                msg: 'Your bid appears too low'
-              });
-              $log.info({
-                message: "Your bid appears too low",
-                bid_data: bid
-              });
-            }
             var msg_id = Math.random();
             if (bid == -1) {
               $rootScope.alerts = [];
@@ -492,7 +521,6 @@ angular.module('auction').controller('AuctionController',[
               $rootScope.form.bid = "";
               $rootScope.form.full_price = '';
               $rootScope.form.bid_temp = '';
-
             } else {
               $log.info({
                 message: "Handle success response on post bid",
