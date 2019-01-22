@@ -30,7 +30,7 @@ describe('Post Bid Form Tests', function () {
   it('should raise validation error if bid is less than 70% of max allowed', function () {
       scope.form.BidsForm.bid.$setViewValue('100');
       scope.$digest();
-      expect(scope.form.bid).toEqual(100);
+      expect(scope.form.bid).toEqual("100");
 
       expect(scope.post_bid()).toBe(0);
       expect(scope.alerts.length).toBe(1);
@@ -42,7 +42,7 @@ describe('Post Bid Form Tests', function () {
       scope.form.BidsForm.bid.$setViewValue("0");
       scope.$digest();
 
-      expect(scope.form.bid).toEqual(0);
+      expect(scope.form.bid).toEqual("0");
       expect(scope.post_bid()).toBe(0);
       expect(scope.alerts.length).toBe(1);
       expect(scope.alerts[0].msg).toBe("You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?");
@@ -53,7 +53,7 @@ describe('Post Bid Form Tests', function () {
       scope.form.BidsForm.bid.$setViewValue("900");
       scope.$digest();
 
-      expect(scope.form.bid).toEqual(900);
+      expect(scope.form.bid).toEqual("900");
       expect(scope.post_bid(-1)).toBe(undefined);
       expect(scope.alerts.length).toBe(0);
   });
@@ -62,7 +62,7 @@ describe('Post Bid Form Tests', function () {
       scope.form.BidsForm.bid.$setViewValue("10");
       scope.$digest();
 
-      expect(scope.form.bid).toEqual(10);
+      expect(scope.form.bid).toEqual("10");
       expect(scope.post_bid(-1)).toBe(undefined);
       expect(scope.alerts.length).toBe(0);
   });
@@ -70,7 +70,7 @@ describe('Post Bid Form Tests', function () {
   it('should not raise exception if bid is greater than 70% of max allowed', function () {
       scope.form.BidsForm.bid.$setViewValue('700.01');
       scope.$digest();
-      expect(scope.form.bid).toEqual(700.01);
+      expect(scope.form.bid).toEqual("700.01");
       expect(scope.post_bid()).toBe(undefined);
       expect(scope.alerts.length).toBe(0);
   });
@@ -78,7 +78,7 @@ describe('Post Bid Form Tests', function () {
   it('should disable validation once post_bid is called', function () {
       scope.form.BidsForm.bid.$setViewValue('700');
       scope.$digest();
-      expect(scope.form.bid).toEqual(700);
+      expect(scope.form.bid).toEqual("700");
 
       expect(scope.force_post_low_bid).toBe(undefined);
       expect(scope.post_bid()).toBe(0);
@@ -92,7 +92,7 @@ describe('Post Bid Form Tests', function () {
   it('should show validation again after cancelling', function () {
       scope.form.BidsForm.bid.$setViewValue('700');
       scope.$digest();
-      expect(scope.form.bid).toEqual(700);
+      expect(scope.form.bid).toEqual("700");
 
       // first try (error expected)
       expect(scope.force_post_low_bid).toBe(undefined);
