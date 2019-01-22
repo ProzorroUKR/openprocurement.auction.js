@@ -30,10 +30,6 @@ angular.module('auction').controller('AuctionController',[
     $rootScope.default_http_error_timeout = 500;
     $rootScope.http_error_timeout = $rootScope.default_http_error_timeout;
     $rootScope.browser_client_id = AuctionUtils.generateUUID();
-    $rootScope.$watch(function() {return $cookies.logglytrackingsession; },
-    function(newValue, oldValue) {
-      $rootScope.browser_session_id = $cookies.logglytrackingsession;
-    });
     window.onunload = function () {
       $log.info("Close window")
       if($rootScope.changes){
@@ -43,15 +39,13 @@ angular.module('auction').controller('AuctionController',[
         $rootScope.evtSrc.close();
       }
     }
+
     if (AuctionConfig.auction_doc_id.indexOf("_") > 0 ){
-      dataLayer.push({
-        "tenderId": AuctionConfig.auction_doc_id.split("_")[0],
-        "lotId": AuctionConfig.auction_doc_id.split("_")[1]
-      });
+      var doc_id_parts =  AuctionConfig.auction_doc_id.split("_")
+      $log.context["TENDER_ID"] = doc_id_parts[0];
+      $log.context["LOT_ID"] = doc_id_parts[1];
     } else {
-      dataLayer.push({
-        "tenderId": AuctionConfig.auction_doc_id
-      });
+      $log.context["TENDER_ID"] = AuctionConfig.auction_doc_id;
     }
     $log.info({
       message: "Start session",
