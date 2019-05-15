@@ -177,7 +177,8 @@ angular.module('auction').config(
     'Please use the correct link to view the auction.': 'Будь ласка, використовуйте правильне посилання для перегляду аукціону.',
     'Auction has not started and will be rescheduled': 'Аукціон не розпочався і буде перепланований',
     'Please wait for the auction start.': 'Будь ласка, дочекайтесь початку аукціону.',
-    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Ви збираєтеся значно понизити свою ставку на {{too_low_bid_ratio}}%. Ви впевнені?'
+    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Ви збираєтеся значно понизити свою ставку на {{too_low_bid_ratio}}%. Ви впевнені?',
+    "Your post bid request still hasn't succeed. Check (or change) your internet connection, browser or device.": "Ваш запит ставки досі не доставлено. Перевірте (або змініть) ваше інтернет-з'єднання, браузер або пристрій."
   });
 
 
@@ -267,6 +268,7 @@ angular.module('auction').config(
     'Please use the correct link to view the auction.': 'Пожалуйста, используйте правильную ссылку для просмотра аукциона.',
     'Auction has not started and will be rescheduled': 'Аукцион не начался и будет перепланирован',
     'Please wait for the auction start.': 'Пожалуйста, дождитесь начала аукциона.',
-    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Вы собираетесь значительно снизить свою ставку на {{too_low_bid_ratio}}%. Вы уверены?'
+    'You are going to decrease your bid by {{too_low_bid_ratio}}%. Are you sure?': 'Вы собираетесь значительно снизить свою ставку на {{too_low_bid_ratio}}%. Вы уверены?',
+    "Your post bid request still hasn't succeed. Check (or change) your internet connection, browser or device.": "Ваш запрос ставки всё ещё не был доставлен. Проверьте (или измените) ваше интернет-подкючение, браузер или устройство."
   });
 });
