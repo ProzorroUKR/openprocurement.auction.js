@@ -393,6 +393,35 @@ angular.module('auction').controller('AuctionController',[
     $rootScope.warning_post_bid = function(){
       growl.error('Unable to place a bid. Check that no more than 2 auctions are simultaneously opened in your browser.');
     };
+
+    $rootScope.request_failed_warning = null;
+    $rootScope.show_failed_request_warning = function(){
+        if(!$rootScope.request_failed_warning){
+            $rootScope.request_failed_warning = growl.error(
+                "Your post bid request still hasn't succeed. Check (or change) your internet connection, browser or device.",
+                {ttl: -1, disableCountDown: true}
+            );
+        }
+    };
+    $rootScope.request_failed_warning_timeout = null;
+    $rootScope.schedule_failed_request_warning = function(){
+        if (!$rootScope.request_failed_warning_timeout) {
+            $rootScope.request_failed_warning_timeout = $timeout($rootScope.show_failed_request_warning, 5000);
+        }
+    };
+    $rootScope.remove_failed_request_warning = function(){
+        if($rootScope.request_failed_warning){
+            $rootScope.growlMessages.deleteMessage(
+                $rootScope.request_failed_warning
+            );
+            delete $rootScope.request_failed_warning;
+        }
+        if ($rootScope.request_failed_warning_timeout) {
+            $timeout.cancel($rootScope.request_failed_warning_timeout);
+            delete $rootScope.request_failed_warning_timeout;
+        }
+    };
+
     var too_low_bid_msg_id = "too_low_bid_msg_id";
     $rootScope.show_too_low_bid_warning = function(value){
         var prev_value = 0;
@@ -468,11 +497,13 @@ angular.module('auction').controller('AuctionController',[
         if (!$rootScope.post_bid_timeout) {
           $rootScope.post_bid_timeout = $timeout($rootScope.warning_post_bid, 10000);
         }
+        $rootScope.schedule_failed_request_warning();
 
         $http.post(base_url + '/postbid', {
           'bid': parseFloat(bid) || parseFloat($rootScope.form.bid) || 0,
           'bidder_id': $rootScope.bidder_id || bidder_id || "0"
         }).then(function(success) {
+          $rootScope.remove_failed_request_warning();
           if ($rootScope.post_bid_timeout){
             $timeout.cancel($rootScope.post_bid_timeout);
             delete $rootScope.post_bid_timeout;
@@ -538,6 +569,7 @@ angular.module('auction').controller('AuctionController',[
               delete $rootScope.post_bid_timeout;
             }
             if (error.status == 401) {
+              $rootScope.remove_failed_request_warning();
               $rootScope.alerts.push({
                 msg_id: Math.random(),
                 type: 'danger',
